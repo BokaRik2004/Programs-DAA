@@ -1,87 +1,106 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
+#define INF 99999
 #define MAX 20
-#define INF 999
+
 class Graph
-{ private:
-int v, e;
-float adw[MAX + 1][MAX + 1];
-int vis[MAX + 1];
-public:
-Graph(int vertices, int edges); // Constructor declaration
-void inputGraph(); // Function declarations
-void prims();
+{
+	public:
+		int v,e;
+		int ADW[MAX][MAX];
+		int vis[MAX];
+		Graph(int vertices,int edges);
+		void inputgraph();
+		void prims();
 };
-// Constructor Definition
-Graph::Graph(int vertices, int edges) {
-v = vertices;
-e = edges;
-for (int i = 1; i <= v; i++) {
-10
-vis[i] = 0;
-for (int j = 1; j <= v; j++)
-{ if (i == j)
-adw[i][j] = 0;
-else
-adw[i][j] = INF;
+
+Graph::Graph(int vertices,int edges)
+{
+	v=vertices;
+	e=edges;
+	
+	for(int i=0;i<v;i++)
+	{
+		vis[i]=0;
+		for(int j=0;j<v;j++)
+		{
+			if(i==j)
+			{
+				ADW[i][j]=0;
+			}
+			else
+			{
+				ADW[i][j]=INF;
+			}
+		}
+	}
 }
+
+void Graph::inputgraph()
+{
+	int j,k,ew;
+	for(int i=0;i<e;i++)
+	{
+		cout<<"Enter the end vertices for edge "<<i+1<<": ";
+		cin>>j>>k;
+		if(j<0||k<0||j>v||k>v)
+		{
+			cout<<"Invalid end vertices,enter again"<<endl;
+			cin>>j>>k;	
+		}	
+		cout<<"Enter the edge weight: ";
+		cin>>ew;
+		
+		ADW[j-1][k-1]=ew;
+		ADW[k-1][j-1]=ew;
+	}	
 }
+
+void Graph::prims()
+{
+	int start,u,vu;
+	int wt,totalWeight=0;
+	cout<<"Enter the starting vertex: ";
+	cin>>start;
+	vis[start]=1;
+	
+	for(int i=0;i<v-1;i++)
+	{
+		wt=INF;
+		u=-1;
+		vu=-1;
+		for(int x=0;x<=v-1;x++)
+		{
+			if(vis[x]==1)
+			{
+				for(int y=0;y<=v-1;y++)
+				{
+					if(vis[y]==0&&ADW[x][y]<wt)
+					{
+						wt=ADW[x][y];
+						u=x;
+						vu=y;
+					}
+				}
+			}
+		}
+		vis[vu]=1;
+		totalWeight+=wt;
+		cout<<u<<","<<vu<<"-->"<<wt<<endl;	
+	}
+	cout<<"Minimum weight of the MST: "<<totalWeight<<endl;
 }
-// Input Graph Definition
-void Graph::inputGraph() {
-int j, k;
-float ew;
-for (int i = 0; i < e; i++)
-{ do {
-cout << "Enter the vertices connected by edge " << i + 1 << ": ";
-scanf("%d,%d"
-, &j, &k);
-} while (j < 1 || j > v || k < 1 || k > v);
-cout << "Enter the edge weight: ";
-cin >> ew;
-adw[j][k] = ew;
-adw[k][j] = ew;
-}
-}
-//Prim's Algorithm Definition
-void Graph::prims() {
-int u, vu;
-float wt, totalWeight = 0;
-cout << "\nEnter the starting vertex: ";
-cin >> u;
-vis[u] = 1;
-for (int i = 1; i <= v - 1; i++)
-{ wt = INF;
-for (int k = 1; k <= v; k++)
-{ if (vis[k] == 1) {
-for (int j = 1; j <= v; j++) {
-if (vis[j] == 0 && adw[k][j] < wt)
-{ wt = adw[k][j];
-u = k;
-vu = j;
-}
-}
-}
-}
-vis[vu] = 1;
-11
-totalWeight += wt;
-cout << u << "
-" << vu << "
-,
---> " << wt << endl;
-}
-cout << "\nMinimum weight of the MST = " << totalWeight << endl;
-}
-//Main Function
-int main() {
-int v, e;
-cout << "Enter the number of vertices: ";
-cin >> v;
-cout << "Enter the number of edges: ";
-cin >> e;
-Graph g(v, e);
-g.inputGraph();
-g.prims();
-return 0;
+ 
+int main()
+{
+	int v,e;
+	cout<<"Enter the number of vertices: ";
+	cin>>v;
+	cout<<"Enter the number of edges: ";
+	cin>>e;
+	Graph g(v,e);
+	g.inputgraph();
+	g.prims();
+	
+	return 0;
 }
