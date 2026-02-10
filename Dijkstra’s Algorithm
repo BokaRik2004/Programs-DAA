@@ -1,0 +1,161 @@
+#include <iostream>
+#include <iomanip> using namespace std;
+/*for fixed and setprecision*/
+class Graph
+{
+private:
+int status[50], pred[20];
+float cost[50][50], dist[50];
+public:
+Graph();
+void inputGraph();
+void display(int);
+void dijkstra(int, int, int);
+};
+/*
+-------- Constructor---------
+Graph::Graph()
+*/
+18
+{
+for (int i = 0; i < 50; i++)
+{
+}
+status[i] = 0;
+dist[i] = 0;
+for (int j = 0; j < 50; j++)
+cost[i][j] = 0;
+for (int i = 0; i < 20; i++)
+pred[i] = 0;
+}
+/*
+{
+-------- Input Graph---------
+void Graph::inputGraph()
+*/
+int n, e, i, j, src, dst;
+float wt;
+cout << "***Taking input of the graph to perform Dijkstra's algorithm***\n";
+cout << "\nEnter the no. of vertices: ";
+cin >> n;
+cout << "\nEnter the no. of edges: ";
+cin >> e;
+for (int k = 1; k <= e; k++)
+{
+cout << "Enter the vertex pair for edge " << k << ": ";
+cin >> i >> j;
+cout << "Enter the weight of the edge(" << k << "): ";
+cin >> wt;
+cost[i][j] = wt;
+cost[j][i] = wt; /*undirected*/
+}
+cout << "\nThe cost matrix is:\n";
+display(n);
+cout << "\nINF stands for infinity\n";
+cout << "\nEnter the starting vertex: ";
+cin >> src;
+cout << "Enter the destination vertex: ";
+cin >> dst;
+dijkstra(n, src, dst);
+}
+/*
+{
+-------- Dijkstra---------
+*/
+void Graph::dijkstra(int n, int src, int dst)
+int arr[20], count, nextnode = 0, i, j;
+float min;
+for (i = 1; i <= n; i++)
+{
+dist[i] = cost[src][i];
+pred[i] = src;
+}
+dist[src] = 0;
+status[src] = 1;
+19
+count = 1;
+while (count <= n - 1)
+{
+min = 999;
+for (i = 1; i <= n; i++)
+{
+if (status[i] == 0 && dist[i] < min)
+{
+min = dist[i];
+nextnode = i;
+}
+}
+status[nextnode] = 1;
+for (i = 1; i <= n; i++)
+{
+if (status[i] == 0)
+{
+if (min + cost[nextnode][i] < dist[i])
+{
+dist[i] = min + cost[nextnode][i];
+pred[i] = nextnode;
+}
+}
+}
+count++;
+}
+for (i = 1; i <= n; i++)
+{
+cout << "\nV" << src << "
+->V" << i << "= " << fixed << setprecision(2) << dist[i];
+}
+i = 1;
+arr[i] = j = dst;
+while (j != src)
+{
+cout << "\nShortest path from V" << src << " to V" << dst << " is: ";
+i++;
+j = pred[j];
+arr[i] = j;
+}
+for (j = i; j >= 1; j--)
+{
+if (j != 1)
+cout << "V" << arr[j] << "
+-> ";
+else
+cout << "V" << arr[j];
+}
+}
+/*
+{
+-------- Display---------
+void Graph::display(int n)
+*/
+cout << "\t";
+for (int i = 1; i <= n; i++)
+cout << "V" << i << "\t";
+cout << "\n";
+20
+for (int i = 1; i <= n; i++)
+{
+for (int j = 0; j <= n; j++)
+{
+if (j == 0)
+else
+{
+cout << "V" << i << "\t";
+if (i != j && cost[i][j] == 0)
+{
+cost[i][j] = 999;
+cout << "INF\t";
+}
+else
+cout << fixed << setprecision(2) << cost[i][j] << "\t";
+}
+}
+cout << "\n";
+}
+}
+/* Main */
+int main()
+{
+Graph g;
+g.inputGraph();
+return 0;
+}
