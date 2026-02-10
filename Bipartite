@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+#define MAX 50
+class Graph
+{
+private:
+int v, e;
+int adj[MAX+1][MAX+1];
+int color[MAX+1];
+int q[MAX+1];
+public:
+Graph(int vertices, int edges); /*Constructor*/
+void inputGraph(); /* Function declarations*/
+bool isBipartite();
+void displayPartition();
+};
+/* constructor definition */
+Graph::Graph(int vertices, int edges)
+{
+v = vertices;
+e = edges;
+for(int i = 1; i <= v; i++)
+{
+for(int j = 1; j <= v;
+j++){ adj[i][j] = 0;
+color[i] = -1;
+}
+}
+}
+/* input graph */
+void Graph::inputGraph()
+{
+int x, y;
+for(int i = 1; i <= e; i++)
+{
+cout << "Enter end vertices of edge " << i << ": ";
+cin >> x >> y;
+adj[x][y] = 1;
+adj[y][x] = 1;
+}
+}
+/* bipartite checking */
+bool Graph::isBipartite()
+{
+for(int s = 1; s <= v; s++)
+{
+if(color[s] == -1){
+int front = 0, rear = 0;
+q[rear++] = s; color[s]
+= 0; while(front <
+rear) {
+39
+int u = q[front++];
+for(int w = 1; w <= v; ) {
+if(adj[u][w] == 1){
+if(color[w] == -1)
+{ color[w] = 1 -
+color[u]; q[rear++] = w;
+}
+else if(color[w] == color[u])
+return false;
+}
+}
+}
+}
+}
+return true;
+}
+/* display partitions */
+void Graph::displayPartition()
+{
+cout << "\nV1 = { ";
+for(int i = 1; i <= v; i++)
+{
+if(color[i] == 0)
+cout << i << " ";
+}
+cout << "}";
+cout << "\nV2 = { ";
+for(int i = 1; i <= v; i++)
+{
+if(color[i] == 1)
+cout << i << " ";
+}
+cout << "}";
+}
+{
+int main()
+int v, e;
+cout << "Enter number of vertices: ";
+cin >> v;
+cout << "Enter number of edges: ";
+cin >> e;
+Graph G(v, e); /*object creation*/
+G.inputGraph();
+if(G.isBipartite())
+G.displayPartition();
+else
+cout << "\nGraph cannot be partitioned into two sets";
+return 0;
+}
