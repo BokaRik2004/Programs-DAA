@@ -78,7 +78,7 @@ cout << "Total cost of MST: " << totalCost << endl;
 }
 {
 int main()
-Kruskal k; k.input();
+Graph k; k.input();
 k.kruskal();
 return 0;
 // Constructor automatically called
